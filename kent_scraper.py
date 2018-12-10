@@ -40,12 +40,20 @@ class TableScraper:
 
     def beautify_data(self,df):
 
-        # Rename city column
-        df.iloc[0,0] = 'city'
+        # Rename columns
+        df.columns = ['city',
+        'price','plus_minus','excl_taxes','margin',
+        'price','plus_minus','excl_taxes','margin', 
+        'price','plus_minus','excl_taxes','margin', 
+        'price','plus_minus','excl_taxes','margin', 
+        'price','plus_minus','excl_taxes',
+        'price','plus_minus','excl_taxes',
+        ]
 
-        new_header = df.iloc[0] #grab the first row for the header
         df = df[1:] #take the data less the header row
-        df.columns = new_header #set the header row as the df header
+
+        # This is faster 
+        # df.drop(df.index[0])
 
         return df
 
@@ -78,10 +86,22 @@ class TableScraper:
         for key,value in df_dict.items():
             value['Date'] = self.get_date(soup)
 
-        return df_dict
+        # Convert to dictionary of lists
+        table_list = {}
+        for key, value in df_dict.items():
+
+            value = value.values.tolist()
+            table_list.update({key:value})
+
+        return table_list
 
 
 if __name__ == "__main__":
 
     scr = TableScraper()
-    db = scr.db_tables('https://charting.kentgroupltd.com/WPPS_Public/DPPS_Public.htm')
+    tables = scr.db_tables('https://charting.kentgroupltd.com/WPPS_Public/DPPS_Public.htm')
+    
+    df = tables['regular']
+
+    print(df)
+ 

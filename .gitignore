@@ -2,3 +2,4 @@ config.json
 scratch.py
 /env
 .vscode
+__pycache__
