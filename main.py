@@ -27,6 +27,7 @@ def main():
 
             # Connect to the database
             conn = db.connect()
+
             if conn.is_connected():
                 # Insert to the regular table
                 statement = db.sql_writer_insert('regular', 'city', 'price', 'plus_minus', 'excl_taxes', 'margin',
@@ -51,7 +52,7 @@ def main():
 
 if __name__ == "__main__":
 
-    schedule.every(800).minutes.do(main)
+    schedule.every(0.001).minutes.do(main)
 
     while True:
         schedule.run_pending()
