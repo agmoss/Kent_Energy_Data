@@ -1,3 +1,5 @@
+import logging
+
 # Config
 def db_config():
     """Setup"""
@@ -22,9 +24,6 @@ from mysql.connector import Error
 def connect(db_config):
     """ Connect to MySQL database """
 
-    #Default return value
-    conn = None
-
     try:
         host,user,password,db = db_config()
 
@@ -35,15 +34,15 @@ def connect(db_config):
         
     #make these raise to return?
     except mysql.connector.errors.ProgrammingError as e:
-        print(e)
+        logging.info(e)
         raise 
 
     except mysql.connector.errors.InterfaceError as e:
-        print(e)
+        logging.info(e)
         raise
 
     except Exception as ex:
-        print(ex)
+        logging.info(ex)
         raise
 
     return conn
@@ -51,20 +50,15 @@ def connect(db_config):
 def insert_many(mydb,val,sql):
     """Insert the list of records"""
     
-    #Default return value
-    insert = False
-
     try:
         my_cursor = mydb.cursor()
         my_cursor.executemany(sql, val)
         mydb.commit()
-        insert = True
 
     except Exception as ex: #Expand on exception handling
-        print(ex)
+        logging.info(ex)
         raise
         
-    return insert
 
 
 def sql_writer_insert(table_name, *args):

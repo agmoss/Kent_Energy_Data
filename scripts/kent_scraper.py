@@ -2,6 +2,8 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+import logging
+
 
 class TableScraper:
 
@@ -9,14 +11,19 @@ class TableScraper:
         self.url = url
 
     def status_code(self):
-
+        """Depricated"""
         r = requests.get(self.url)
         return r.status_code
 
     def get_soup(self):
 
         r = requests.get(self.url)
-        soup = BeautifulSoup(r.content, 'html5lib')
+
+        if r.status_code != 200:
+            raise Exception("Kent website offline!") # Handled by the caller
+        else:
+            soup = BeautifulSoup(r.content, 'html5lib')
+
         return soup
 
     def get_data_body(self, soup):
@@ -73,30 +80,35 @@ class TableScraper:
 
         # table_names = ['Regular','Mid-Grade','Premium','Diesel','Automotive_Propane','Furnace_Oil']
 
-        soup = self.get_soup()
-        df = self.get_data_body(soup)
+        try:
 
-        # Dictionary of tables
-        df_dict = {
-            "regular": pd.DataFrame(df.iloc[:, 0:5]),
-            "mid_grade": pd.DataFrame(df.iloc[:, [0, 5, 6, 7, 8]]),
-            "premium": pd.DataFrame(df.iloc[:, [0, 9, 10, 11, 12]]),
-            "diesel": pd.DataFrame(df.iloc[:, [0, 13, 14, 15, 16]]),
-            "automotive_propane": pd.DataFrame(df.iloc[:, [17, 18, 19]]),
-            "furnace_oil": pd.DataFrame(df.iloc[:, [20, 21, 22]]),
-        }
+            soup = self.get_soup()
+            df = self.get_data_body(soup)
 
-        # Add the date field
-        for key, value in df_dict.items():
-            value['Date'] = self.get_date(soup)
+            # Dictionary of tables
+            df_dict = {
+                "regular": pd.DataFrame(df.iloc[:, 0:5]),
+                "mid_grade": pd.DataFrame(df.iloc[:, [0, 5, 6, 7, 8]]),
+                "premium": pd.DataFrame(df.iloc[:, [0, 9, 10, 11, 12]]),
+                "diesel": pd.DataFrame(df.iloc[:, [0, 13, 14, 15, 16]]),
+                "automotive_propane": pd.DataFrame(df.iloc[:, [17, 18, 19]]),
+                "furnace_oil": pd.DataFrame(df.iloc[:, [20, 21, 22]]),
+            }
 
-        # Convert to dictionary of lists
-        table_list = {}
-        for key, value in df_dict.items():
-            value = value.values.tolist()
-            table_list.update({key: value})
+            # Add the date field
+            for key, value in df_dict.items():
+                value['Date'] = self.get_date(soup)
 
-        return table_list
+            # Convert to dictionary of lists
+            table_list = {}
+            for key, value in df_dict.items():
+                value = value.values.tolist()
+                table_list.update({key: value})
+
+            return table_list
+
+        except Exception: #handled by the callar
+            raise
 
 
 if __name__ == "__main__":
