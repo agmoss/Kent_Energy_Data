@@ -1,5 +1,6 @@
 # Config
 def db_config():
+    """Setup"""
 
     import json
 
@@ -31,38 +32,43 @@ def connect(db_config):
                                         database=db,
                                         user=user,
                                         password=password)
-
+        
+    #make these raise to return?
     except mysql.connector.errors.ProgrammingError as e:
-        print("Configuration error")
+        print(e)
+        raise 
 
     except mysql.connector.errors.InterfaceError as e:
-        print("The database is offline")
+        print(e)
+        raise
+
+    except Exception as ex:
+        print(ex)
+        raise
 
     return conn
 
-def insert_record(mydb, record, sql):
-
+def insert_many(mydb,val,sql):
+    """Insert the list of records"""
+    
     #Default return value
     insert = False
 
     try:
         my_cursor = mydb.cursor()
-        my_cursor.execute(sql, record)
+        my_cursor.executemany(sql, val)
         mydb.commit()
         insert = True
-        # print(my_cursor.rowcount, "record inserted.")
 
-    except Exception as e: #Expand on exception handling
-        print (e)
+    except Exception as ex: #Expand on exception handling
+        print(ex)
+        raise
         
-
     return insert
 
-def update_table(func, db_conn, records, sql):
-    for x in records:
-        func(db_conn, x, sql)
 
 def sql_writer_insert(table_name, *args):
+    """Generate a custom SQL insert statement"""
     header_list = []
     s_list = []
     for value in args:
@@ -77,6 +83,34 @@ def sql_writer_insert(table_name, *args):
 
     return sql
 
+########
+
+def insert_record(mydb, record, sql):
+    """depricated"""
+    #Default return value
+    insert = False
+
+    try:
+        my_cursor = mydb.cursor()
+        my_cursor.execute(sql, record)
+        mydb.commit()
+        insert = True
+        # print(my_cursor.rowcount, "record inserted.")
+
+    except Exception as ex: #Expand on exception handling
+        
+        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        print(message)
+        
+    return insert
+
+def update_table(func, db_conn, records, sql):
+    """depricated"""
+
+    for x in records:
+        func(db_conn, x, sql)
+
 
 if __name__ == '__main__':
-    connect()
+    connect(db_config)

@@ -8,6 +8,8 @@ import kent_scraper as ks
 
 
 def main():
+    """main method"""
+
     logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO,
                         format='%(asctime)s - %(levelname)s - %(message)s')
     logging.info('Start')
@@ -26,30 +28,33 @@ def main():
             logging.info('Tables created')
 
             # Connect to the database
-            conn = db.connect()
+            conn = db.connect(db.db_config)
 
-            if conn.is_connected():
-                # Insert to the regular table
-                statement = db.sql_writer_insert('regular', 'city', 'price', 'plus_minus', 'excl_taxes', 'margin',
-                                                 'Date')
-                db.update_table(db.insert_record, conn, tables['regular'], statement)
+            # Insert to the regular table
+            statement = db.sql_writer_insert('regular', 'city', 'price', 'plus_minus', 'excl_taxes', 'margin',
+                                                'Date')
+
+            status = db.insert_many(conn, tables['regular'], statement)
+
+            if status:
                 logging.info('Regular data inserted')
-
-                # Insert to the mid grade table
-                statement = db.sql_writer_insert('mid_grade', 'city', 'price', 'plus_minus', 'excl_taxes', 'margin',
-                                                 'Date')
-                db.update_table(db.insert_record, conn, tables['mid_grade'], statement)
-                logging.info('Mid grade data inserted')
-
-        except Exception as ex:
-
-            logging.info("An exception occurred: " + ex.args)
-
-        finally:
+            else:
+                raise Exception
 
             conn.close()
 
+        except Exception as ex:
+            
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+            
+        finally:
+            
+            #TODO Is the finally necessary, what should I put here???
+            pass
 
+            
 if __name__ == "__main__":
 
     schedule.every(0.001).minutes.do(main)

@@ -1,7 +1,9 @@
 import pytest
 
+from Kent_Energy_Data import db_functions as db
+
 # Test the database functions
-import db_functions as db
+#import db_functions as db
 
 # Test connect()
 def test_connection_success():
