@@ -2,6 +2,10 @@
 
 This program scrapes daily pricing data of petrolium products in major canadian cities. The retrieved data is cleaned and stored in a MySQL database for safe storage and analysis.
 
+Scraper target:
+
+https://charting.kentgroupltd.com/WPPS_Public/DPPS_Public.htm
+
 ## Instructions
 
 The use of this program requires a live MySQL database. Please view the database documentation for the required schema.
