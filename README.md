@@ -36,7 +36,7 @@ python3 main.py
 view the app.log file for runtime information
 
 
-To access the data use a MySQL client. 
+To access the data, use a MySQL client. 
 
 ```
 http://123.123.0.12/phpmyadmin/
@@ -58,7 +58,7 @@ All tests should pass before proceeding.
 
 ## Deployment
 
-This system can be deployed on a remote MySQL instance. Ensure the port 3306 is open on your system and that your MySQL server is bound to the servers IP address.
+This system can be deployed on a remote MySQL instance. Ensure the port 3306 is open on your system and that your MySQL server is bound to the IP address of the server.
 
 ## Built With
 
