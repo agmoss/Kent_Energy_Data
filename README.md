@@ -23,11 +23,10 @@ The entry point of the program is the main.py file. After cloning the repository
 
 ```
 cd Kent_Energy_Data
-
 ```
 
+```
 python3 main.py
-
 ```
 
 view the app.log file for runtime information
@@ -36,9 +35,7 @@ view the app.log file for runtime information
 To access the data use a MySQL client. 
 
 ```
-
 http://123.123.0.12/phpmyadmin/
-
 ```
 
 ## Running the tests
