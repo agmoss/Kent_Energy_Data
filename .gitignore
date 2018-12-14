@@ -5,3 +5,4 @@ scratch.py
 __pycache__
 *.log
 .idea/
+.pytest_cache

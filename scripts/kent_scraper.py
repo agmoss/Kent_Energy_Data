@@ -1,19 +1,12 @@
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-
 import logging
-
 
 class TableScraper:
 
     def __init__(self, url):
         self.url = url
-
-    def status_code(self):
-        """Depricated"""
-        r = requests.get(self.url)
-        return r.status_code
 
     def get_soup(self):
 
@@ -63,9 +56,6 @@ class TableScraper:
 
         df = df[1:]  # take the data less the header row
 
-        # This is faster 
-        # df.drop(df.index[0])
-
         return df
 
     def get_date(self, soup):
@@ -77,8 +67,6 @@ class TableScraper:
         return row[0]
 
     def db_tables(self):
-
-        # table_names = ['Regular','Mid-Grade','Premium','Diesel','Automotive_Propane','Furnace_Oil']
 
         try:
 
@@ -107,14 +95,9 @@ class TableScraper:
 
             return table_list
 
-        except Exception: #handled by the callar
-            raise
+        except Exception("Cannot create the scraped tables"): 
+            raise #handled by the caller
 
 
 if __name__ == "__main__":
-    scr = TableScraper('https://charting.kentgroupltd.com/WPPS_Public/DPPS_Public.htm')
-    tables = scr.db_tables()
 
-    df = tables['furnace_oil']
-
-    print(df)

@@ -1,11 +1,9 @@
 import logging
 import time
-
 import schedule
 
 from scripts import db_functions as db
 from scripts import kent_scraper as ks
-
 
 def main():
     """main method"""
@@ -19,7 +17,7 @@ def main():
 
     try:
 
-        # Create the tables
+        # Create the scraped tables
         tables = scr.db_tables()
         logging.info('Tables created')
 

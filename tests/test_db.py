@@ -1,6 +1,6 @@
 import pytest
 
-from Kent_Energy_Data import db_functions as db
+from ..scripts import db_functions as db
 
 # Test the database functions
 #import db_functions as db
@@ -20,29 +20,7 @@ def test_connection_failure():
         d = "fake db"
 
         return a,b,c,d
+    
+    with pytest.raises(Exception) as e_info:
 
-    connection = db.connect(sample)
-    assert connection == None
-
-def test_insert_record_success():
-
-    #Instantate the necessary paramaters
-    connection = db.connect(db.db_config)
-    record = ['Test',1,1,1,1,'Test']
-    statement = db.sql_writer_insert('regular', 'city', 'price', 'plus_minus', 'excl_taxes', 'margin', 'Date')
-
-    status = db.insert_record(connection,record,statement)
-
-    assert status == True
-
-
-def test_insert_record_failure():
-
-    # Instantate the necessary paramaters
-    connection = db.connect(db.db_config)
-    record = ['Test',1,1,1,1]
-    statement = db.sql_writer_insert('regular', 'city', 'price', 'plus_minus', 'excl_taxes', 'margin', 'Date')
-
-    status = db.insert_record(connection,record,statement)
-
-    assert status == False
+        connection = db.connect(sample)
