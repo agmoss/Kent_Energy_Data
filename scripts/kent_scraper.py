@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-import logging
+
 
 class TableScraper:
 
@@ -13,7 +13,7 @@ class TableScraper:
         r = requests.get(self.url)
 
         if r.status_code != 200:
-            raise Exception("Kent website offline!") # Handled by the caller
+            raise Exception("Kent website offline!")  # Handled by the caller
         else:
             soup = BeautifulSoup(r.content, 'html5lib')
 
@@ -95,9 +95,9 @@ class TableScraper:
 
             return table_list
 
-        except Exception("Cannot create the scraped tables"): 
-            raise #handled by the caller
+        except Exception("Cannot create the scraped tables"):
+            raise  # handled by the caller
 
 
 if __name__ == "__main__":
-
+    print(__name__)

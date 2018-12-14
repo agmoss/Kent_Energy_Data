@@ -5,6 +5,7 @@ import schedule
 from scripts import db_functions as db
 from scripts import kent_scraper as ks
 
+
 def main():
     """main method"""
 
@@ -12,7 +13,7 @@ def main():
                         format='%(asctime)s - %(levelname)s - %(message)s')
     logging.info('Start')
 
-    #Scraper object
+    # Scraper object
     scr = ks.TableScraper('https://charting.kentgroupltd.com/WPPS_Public/DPPS_Public.htm')
 
     try:
@@ -27,12 +28,12 @@ def main():
 
         # Create SQL statement
         statement = db.sql_writer_insert('regular', 'city', 'price', 'plus_minus', 'excl_taxes', 'margin',
-                                            'Date')
+                                         'Date')
 
         # Insert to the regular table
-        db.insert_many(conn, tables['regular'], statement) # exception raised if data not inserted
+        db.insert_many(conn, tables['regular'], statement)  # exception raised if data not inserted
 
-        logging.info('Regular data inserted') #Successfull insert
+        logging.info('Regular data inserted')  # Successfull insert
 
         conn.close()
 
@@ -40,14 +41,14 @@ def main():
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
         logging.info(message)
-        
+
     finally:
         logging.info("Run Complete")
 
-            
+
 if __name__ == "__main__":
 
-    schedule.every(0.001).minutes.do(main)
+    schedule.every(1440).minutes.do(main)
 
     while True:
         schedule.run_pending()

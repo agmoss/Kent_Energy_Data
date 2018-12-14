@@ -1,4 +1,3 @@
-
 """
 A setuptools based setup module.
 
@@ -23,14 +22,14 @@ setup(
     long_description=long_description,
     author='Andrew Moss',
     author_email='agordonmoss@gmail.com',
-    classifiers=[  
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-        ],
-        keywords='web scraping',
-        url='https://github.com/agmoss',
-        license=license,
-        packages=find_packages(exclude=('tests', 'docs'))
+    ],
+    keywords='web scraping',
+    url='https://github.com/agmoss',
+    license=license,
+    packages=find_packages(exclude=('tests', 'docs'))
 )

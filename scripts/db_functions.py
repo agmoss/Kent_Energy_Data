@@ -1,6 +1,7 @@
 import logging
+import mysql.connector
 
-# Config
+
 def db_config():
     """Setup"""
 
@@ -14,28 +15,24 @@ def db_config():
     password = config['DATABASE_CONFIG']['password']
     db = config['DATABASE_CONFIG']['dbname']
 
-    return host,user,password,db
+    return host, user, password, db
 
 
-import mysql.connector
-from mysql.connector import Error
-
-
-def connect(db_config):
+def connect(config):
     """ Connect to MySQL database """
 
     try:
-        host,user,password,db = db_config()
+        host, user, password, db = config()
 
         conn = mysql.connector.connect(host=host,
-                                        database=db,
-                                        user=user,
-                                        password=password)
-        
-    #make these raise to return?
+                                       database=db,
+                                       user=user,
+                                       password=password)
+
+    # make these raise to return?
     except mysql.connector.errors.ProgrammingError as e:
         logging.info(e)
-        raise 
+        raise
 
     except mysql.connector.errors.InterfaceError as e:
         logging.info(e)
@@ -47,18 +44,20 @@ def connect(db_config):
 
     return conn
 
-def insert_many(mydb,val,sql):
-    """Insert the list of records"""
-    
-    try:
-        my_cursor = mydb.cursor()
-        my_cursor.executemany(sql, val)
-        mydb.commit()
 
-    except Exception as ex: #TODO Expand on exception handling (there should be some mysql error objects to access)
+def insert_many(db, val, sql):
+    """Insert the list of records"""
+
+    try:
+        my_cursor = db.cursor()
+        my_cursor.executemany(sql, val)
+        db.commit()
+
+    except Exception as ex:  # TODO Expand on exception handling (there should be some mysql error objects to access)
         logging.info(ex)
         raise
-        
+
+
 def sql_writer_insert(table_name, *args):
     """Generate a custom SQL insert statement"""
     header_list = []
@@ -74,6 +73,7 @@ def sql_writer_insert(table_name, *args):
     sql = "INSERT INTO " + table_name + " (" + header_list + ") " + "VALUES" + " (" + s_list + ")"
 
     return sql
+
 
 if __name__ == '__main__':
     connect(db_config)
