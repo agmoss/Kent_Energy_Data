@@ -25,7 +25,7 @@ class TableScraper:
         table_rows = table.find_all('tr')
 
         res = []
-        for tr in table_rows[4:83]:  # Skip the first 4 rows
+        for tr in table_rows[4:82]:  # Skip the first 4 rows
             td = tr.find_all('td')
             row = [tr.text.strip() for tr in td if tr.text.strip()]
             if row:
@@ -79,8 +79,8 @@ class TableScraper:
                 "mid_grade": pd.DataFrame(df.iloc[:, [0, 5, 6, 7, 8]]),
                 "premium": pd.DataFrame(df.iloc[:, [0, 9, 10, 11, 12]]),
                 "diesel": pd.DataFrame(df.iloc[:, [0, 13, 14, 15, 16]]),
-                "automotive_propane": pd.DataFrame(df.iloc[:, [17, 18, 19]]),
-                "furnace_oil": pd.DataFrame(df.iloc[:, [20, 21, 22]]),
+                "automotive_propane": pd.DataFrame(df.iloc[:, [0, 17, 18, 19]]),
+                "furnace_oil": pd.DataFrame(df.iloc[:, [0, 20, 21, 22]]),
             }
 
             # Add the date field
@@ -101,3 +101,8 @@ class TableScraper:
 
 if __name__ == "__main__":
     print(__name__)
+    # Scraper object
+    scr = TableScraper('https://charting.kentgroupltd.com/WPPS_Public/DPPS_Public.htm')
+    tables = scr.db_tables()
+
+    print(tables['regular'])

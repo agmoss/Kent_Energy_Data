@@ -1,6 +1,7 @@
 import logging
 import time
 import schedule
+import sys
 
 from scripts import db_functions as db
 from scripts import kent_scraper as ks
@@ -26,14 +27,19 @@ def main():
         conn = db.connect(db.db_config)
         logging.info('Connected to the database')
 
-        # Create SQL statement
-        statement = db.sql_writer_insert('regular', 'city', 'price', 'plus_minus', 'excl_taxes', 'margin',
-                                         'Date')
+        for key,value in tables.items():
 
-        # Insert to the regular table
-        db.insert_many(conn, tables['regular'], statement)  # exception raised if data not inserted
+            small_tables = ["automotive_propane", "furnace_oil"]
 
-        logging.info('Regular data inserted')  # Successfull insert
+            if key in small_tables:
+                statement = db.sql_writer_insert(key, 'city', 'price', 'plus_minus', 'excl_taxes','Date')
+            else:
+                statement = db.sql_writer_insert(key, 'city', 'price', 'plus_minus', 'excl_taxes', 'margin','Date')
+
+            # Insert 
+            db.insert_many(conn, value, statement)  # exception raised if data not inserted
+
+            logging.info( key + 'data inserted')  # Successfull insert
 
         conn.close()
 
@@ -48,7 +54,7 @@ def main():
 
 if __name__ == "__main__":
 
-    schedule.every(1440).minutes.do(main)
+    schedule.every(0.001).minutes.do(main)
 
     while True:
         schedule.run_pending()
