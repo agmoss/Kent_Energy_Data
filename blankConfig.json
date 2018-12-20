@@ -1,0 +1,8 @@
+{
+    "DATABASE_CONFIG": {
+      "host": "host",
+      "dbname": "name_of_database",
+      "user": "database_username",
+      "password": "database_password"
+    }
+  }
